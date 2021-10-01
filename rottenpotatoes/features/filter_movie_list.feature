@@ -28,6 +28,17 @@ Scenario: restrict to movies with 'PG' or 'R' ratings
   # enter step to "submit" the search form on the homepage
   # enter step(s) to ensure that PG and R movies are visible
   # enter step(s) to ensure that other movies are not visible
+When I check the following ratings: PG,R
+When I uncheck the following ratings: G,PG-13,NC-17
+And I press "Refresh"
+Then I should see "The Incredible"
+And I should see "The Terminator"
+Then I should not see "Aladdin"
+And I should not see "The Help"
 
 Scenario: all ratings selected
   # see assignment
+When I check the following ratings: G,PG,PG-13,R,NC-17
+And I press "Refresh"
+Then I should see all the movies
+  
