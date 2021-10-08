@@ -1,19 +1,18 @@
--# in app/views/movies/show.html.haml
-
-%h3 Details about #{@movie.title}
-
+/ app/views/movies/show.html.erb
+%h3
+  Details about
+  %em= @movie.title
 %ul#details
   %li
     Rating:
-    = @movie.rating
+    \#{@movie.rating}
   %li
     Released on:
-    = @movie.release_date.strftime("%B %d, %Y")
-
+    \#{@movie.release_date.strftime("%B %d, %Y")}
 %h4 Description:
-
-%p#description= @movie.description
-
-= link_to 'Edit', edit_movie_path(@movie)
-= button_to 'Delete', movie_path(@movie), :method => :delete, :confirm => 'Are you sure?', :class => 'btn btn-primary'
-= link_to 'Back to movie list', movies_path
+%p#description
+  = @movie.description
+.row
+  = link_to 'Edit', edit_movie_path(@movie), :class => 'btn btn-primary col-2'
+  = link_to 'Delete', movie_path(@movie), 'data-method' => 'delete', 'data-confirm' => 'Are you sure?', :class => 'btn btn-danger col-2'
+  = link_to 'Back to movie list', movies_path(:ratings => session[:ratings], :clicked_header => session[:clicked_header]), :class => 'btn btn-primary col-2'

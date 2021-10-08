@@ -1,28 +1,33 @@
--#  This file is app/views/movies/index.html.haml
+/ This file is app/views/movies/index.html.erb
 %h2 All Movies
-
-= form_tag movies_path, :method => :get, :id => 'ratings_form' do
-  = hidden_field_tag "title_sort", true if @title_header
-  = hidden_field_tag ":release_date_sort", true if @date_header
+= form_tag movies_path, method: :get, id: 'ratings_form' do
   Include:
   - @all_ratings.each do |rating|
-    = rating
-    = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}"
-  = submit_tag 'Refresh', :id => 'ratings_submit', :class => 'btn btn-primary'
-
+    .form-check.form-check-inline
+      = label_tag "ratings[#{rating}]", rating, class: 'form-check-label'
+      = check_box_tag "ratings[#{rating}]", "1",  @ratings_to_show.include?(rating), class: 'form-check-input'
+  = submit_tag 'Refresh', id: 'ratings_submit', class: 'btn btn-primary'
 %table#movies.table.table-striped.col-md-12
   %thead
     %tr
-      %th{:class => @title_header}= link_to 'Movie Title', movies_path(:sort => 'title', :ratings => @selected_ratings), :id => 'title_header'
+      %th{class: "<haml_loud"}
+        "hilite" if @clicked_header == "title_header"&gt;
+        %a
+          = link_to "Movie Title", movies_path(:clicked_header => "title_header", :ratings => @ratings_to_show)
       %th Rating
-      %th{:class => @date_header}= link_to 'Release Date', movies_path(:sort => 'release_date', :ratings => @selected_ratings), :id => 'release_date_header'
+      %th{class: "<haml_loud"}
+        "hilite" if @clicked_header == "release_date_header"&gt;
+        \#{link_to "Release Date", movies_path(:clicked_header => "release_date_header", :ratings => @ratings_to_show)}
       %th More Info
   %tbody
     - @movies.each do |movie|
       %tr
-        %td= movie.title
-        %td= movie.rating
-        %td= movie.release_date
-        %td= link_to "More about #{movie.title}", movie_path(movie)
-
-= link_to 'Add new movie', new_movie_path
+        %td
+          = movie.title
+        %td
+          = movie.rating
+        %td
+          = movie.release_date
+        %td
+          = link_to "More about #{movie.title}", movie_path(movie)
+= link_to 'Add new movie', new_movie_path, :class => 'btn btn-primary'
